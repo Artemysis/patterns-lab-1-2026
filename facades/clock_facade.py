@@ -11,14 +11,18 @@ from datetime import datetime
 
 from adapters.digital_clock_adapter import DigitalClockAdapter
 from services import ClockFormatter, ClockHistory
-
+from interfaces.base_digital_clock import BaseDigitalClock
 
 class ClockFacade:
-
-    def __init__(self, clock: DigitalClockAdapter | None = None) -> None:
+    def __init__(
+        self,
+        clock: BaseDigitalClock | None = None,
+        formatter: ClockFormatter | None = None,
+        history: ClockHistory | None = None,
+    ) -> None:
         self._clock = clock if clock is not None else DigitalClockAdapter()
-        self._formatter = ClockFormatter()
-        self._history = ClockHistory()
+        self._formatter = formatter if formatter is not None else ClockFormatter()
+        self._history = history if history is not None else ClockHistory()
 
     def set_current_date_time(self, value: datetime) -> None:
         self._clock.set_date_time(value)
@@ -33,5 +37,5 @@ class ClockFacade:
     def get_history(self) -> tuple[datetime, ...]:
         return self._history.all()
 
-    def get_clock(self) -> DigitalClockAdapter:
+    def get_clock(self) -> BaseDigitalClock:
         return self._clock
