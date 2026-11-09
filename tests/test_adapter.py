@@ -17,14 +17,21 @@ def test_adapter_sets_and_gets_datetime() -> None:
     assert adapter._analog_clock.get_second_angle() == 56 * 6.0
 
 
-def test_adapter_handles_midnight_and_noon() -> None:
+def test_adapter_handles_midnight() -> None:
+    adapter = DigitalClockAdapter()
+
+    adapter.set_date_time(datetime(2026, 9, 24, 12, 0, 0))
+    assert adapter.get_date_time() == datetime(2026, 9, 24, 12, 0, 0)
+    assert adapter._analog_clock.get_day_night_division() is DayNightDivision.PM
+
+def test_adapter_handles_noon() -> None:
     adapter = DigitalClockAdapter()
 
     adapter.set_date_time(datetime(2026, 9, 24, 0, 0, 0))
     assert adapter.get_date_time() == datetime(2026, 9, 24, 0, 0, 0)
     assert adapter._analog_clock.get_day_night_division() is DayNightDivision.AM
 
-    adapter.set_date_time(datetime(2026, 9, 24, 12, 0, 0))
-    assert adapter.get_date_time() == datetime(2026, 9, 24, 12, 0, 0)
-    assert adapter._analog_clock.get_day_night_division() is DayNightDivision.PM
+
+
+
 
